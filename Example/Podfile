@@ -1,0 +1,6 @@
+use_frameworks!
+target 'Sugar_Tests' do
+  pod 'Sugar', :path => '../'
+  
+  
+end

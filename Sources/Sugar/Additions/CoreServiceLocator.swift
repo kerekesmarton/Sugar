@@ -3,35 +3,26 @@ import Foundation
 
 /// A dependency collection that provides resolutions for object instances.
 public class CoreServiceLocator {
+    private init() {}
+    deinit { services.removeAll() }
+    public static var shared = CoreServiceLocator()
+
     /// Stored object instance factories.
     private var services = [String: Register]()
-    
-    /// Construct dependency resolutions.
-    public init(@Builder _ modules: () -> [Register]) {
-        modules().forEach { add(module: $0) }
-    }
-    
-    /// Construct dependency resolution.
-    public init(@Builder _ module: () -> Register) {
-        add(module: module())
-    }
-    
-    /// Assigns the current container to the composition root.
-    public func build() {
-        Self.shared = self
-    }
-    
-    fileprivate init() {}
-    deinit { services.removeAll() }
-}
 
-extension CoreServiceLocator {
-    /// Composition root container of dependencies.
-    static var shared = CoreServiceLocator()
-    
     /// Registers a specific type and its instantiating factory.
     public func add(module: Register) {
         services[module.name] = module
+    }
+
+    public func add(@Builder _ modules: () -> [Register]) {
+        modules().forEach { add(module: $0) }
+    }
+
+    public func add(buildTasks: () -> [ServiceProvider]) {
+        buildTasks().forEach { (task) in
+            task.modules().forEach { add(module: $0)}
+        }
     }
 
     /// Resolves through inference and returns an instance of the given type from the current default container.

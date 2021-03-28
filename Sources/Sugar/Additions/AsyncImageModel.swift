@@ -1,5 +1,4 @@
 import Foundation
-#if !os(macOS)
 import UIKit
 
 public struct AsyncImageModel: Equatable, Hashable, Identifiable {
@@ -22,4 +21,3 @@ public protocol ImageDownloading {
     func store(data: Data, model: AsyncImageModel)
     func fetchLocal(model: AsyncImageModel, completion: @escaping DownloadCompletion)
 }
-#endif
