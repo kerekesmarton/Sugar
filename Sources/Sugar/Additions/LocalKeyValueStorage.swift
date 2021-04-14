@@ -1,9 +1,6 @@
 import Foundation
 
 public class LocalKeyValueStorage {
-//    enum Keys: String {
-//        case uuid = "SessionStorable.uuid"
-//    }
     
     init (){}
     private lazy var defaults = UserDefaults.standard
