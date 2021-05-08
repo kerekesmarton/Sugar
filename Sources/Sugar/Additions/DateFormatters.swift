@@ -68,6 +68,14 @@ public class DateFormatters {
 
         return timeFormatter
     }()
+
+    public static var timeHMSFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .positional
+        formatter.allowedUnits = [.minute, .second]
+        formatter.zeroFormattingBehavior = [.pad]
+        return formatter
+    }()
 }
     
 extension Date {
