@@ -41,7 +41,7 @@ public class CoreServiceLocator {
 
 // MARK: Public API
 public extension CoreServiceLocator {
-    @_functionBuilder struct Builder {
+    @resultBuilder struct Builder {
         public static func buildBlock(_ modules: Register...) -> [Register] { modules }
         public static func buildBlock(_ module: Register) -> Register { module }
     }
