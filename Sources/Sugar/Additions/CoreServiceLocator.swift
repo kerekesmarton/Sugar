@@ -10,18 +10,17 @@ public class CoreServiceLocator {
     /// Stored object instance factories.
     private var services = [String: Register]()
 
-    /// Registers a specific type and its instantiating factory.
-    public func add(module: Register) {
-        services[module.name] = module
+    public func add(@Builder modules: () -> [Register]) {
+        modules().forEach {
+            services[$0.name] = $0
+        }
     }
 
-    public func add(@Builder _ modules: () -> [Register]) {
-        modules().forEach { add(module: $0) }
-    }
-
-    public func add(buildTasks: () -> [ServiceProvider]) {
+    public func addBuildTasks(_ buildTasks: () -> [ServiceProvider]) {
         buildTasks().forEach { (task) in
-            task.modules().forEach { add(module: $0)}
+            task.modules().forEach {
+                services[$0.name] = $0                
+            }
         }
     }
 

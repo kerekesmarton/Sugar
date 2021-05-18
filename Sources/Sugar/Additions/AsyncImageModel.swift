@@ -4,6 +4,7 @@ import SwiftUI
 public enum MediaError: ServiceError {
 
     case empty
+    case playbackFailed
     case unknown
     case other(ServiceError)
 
@@ -11,6 +12,8 @@ public enum MediaError: ServiceError {
         switch self {
         case .empty:
             return "Media not found"
+        case .playbackFailed:
+            return "Playback error"
         case .unknown:
             return "Unknown media error"
         case .other(let error):
@@ -20,7 +23,7 @@ public enum MediaError: ServiceError {
 
     public var recoverySuggestion: String {
         switch self {
-        case .empty, .unknown:
+        case .empty, .unknown, .playbackFailed:
             return ""
         case .other(let error):
             return error.recoverySuggestion
@@ -29,8 +32,8 @@ public enum MediaError: ServiceError {
 
     public var suggestiveImage: Image {
         switch self {
-        case .empty, .unknown:
-            return Image("")
+        case .empty, .unknown, .playbackFailed:
+            return Image(systemName: "play.slash")
         case .other(let error):
             return error.suggestiveImage
         }
@@ -55,6 +58,12 @@ public struct AsyncImageModel: Equatable, Hashable, Identifiable {
 
     public let id: String
     public var identityId: String
+    public init(id: String = UUID().uuidString,
+                identityId: String) {
+        self.id = id
+        self.identityId = identityId
+    }
+
     public var isVideo: Bool {
         return SupportedVideoSuffix.mathesSuffix(self)
     }
@@ -121,14 +130,6 @@ public struct AsyncImageModel: Equatable, Hashable, Identifiable {
 
         let path = makePath(video: videoIdWithoutExtension(self), quality: quality)
         return path
-    }
-
-
-
-    public init(id: String = UUID().uuidString,
-                identityId: String) {
-        self.id = id
-        self.identityId = identityId
     }
 }
 

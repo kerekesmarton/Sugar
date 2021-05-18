@@ -34,7 +34,7 @@ open class AppTasks {
 
     private init(_ serviceProviders: [ServiceProvider], finished: @escaping Action) {
         self.serviceProviders = serviceProviders
-        CoreServiceLocator.shared.add { () -> [ServiceProvider] in
+        CoreServiceLocator.shared.addBuildTasks {
             serviceProviders
         }
 
