@@ -55,15 +55,17 @@ public enum MediaError: ServiceError {
 }
 
 public struct AsyncImageModel: Equatable, Hashable, Identifiable {
-
     public let id: String
     public var identityId: String
+
     public init(id: String = UUID().uuidString,
                 identityId: String) {
         self.id = id
         self.identityId = identityId
     }
+}
 
+extension AsyncImageModel {
     public var isVideo: Bool {
         return SupportedVideoSuffix.mathesSuffix(self)
     }
@@ -84,6 +86,28 @@ public struct AsyncImageModel: Equatable, Hashable, Identifiable {
         }
     }
 
+    public func videoDirectory(quality: VideoQuality) -> String {
+        guard isVideo else {
+            return ""
+        }
+
+        func videoIdWithoutExtension(_ model: AsyncImageModel) -> String {
+            let components = model.id.split(separator: ".")
+            guard let id = components.first, components.count == 2 else {
+                return ""
+            }
+            return String(id)
+        }
+
+        func makePath(video id: String, quality: VideoQuality) -> String {
+            "\(id)/\(id+quality.videoPath)"
+        }
+
+        let path = makePath(video: videoIdWithoutExtension(self), quality: quality)
+        return path
+    }
+}
+extension AsyncImageModel {
     public enum VideoQuality {
         case list
         case audioOnly
@@ -109,27 +133,6 @@ public struct AsyncImageModel: Equatable, Hashable, Identifiable {
                 return ["_3000", fileExtension].joined(separator: ".")
             }
         }
-    }
-
-    public func videoDirectory(quality: VideoQuality) -> String {
-        guard isVideo else {
-            return ""
-        }
-
-        func videoIdWithoutExtension(_ model: AsyncImageModel) -> String {
-            let components = model.id.split(separator: ".")
-            guard let id = components.first, components.count == 2 else {
-                return ""
-            }
-            return String(id)
-        }
-
-        func makePath(video id: String, quality: VideoQuality) -> String {
-            "\(id)/\(id+quality.videoPath)"
-        }
-
-        let path = makePath(video: videoIdWithoutExtension(self), quality: quality)
-        return path
     }
 }
 
