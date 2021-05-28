@@ -117,7 +117,7 @@ extension AsyncImageModel {
         case xLarge
 
         var videoPath: String {
-            var fileExtension = "m3u8"
+            let fileExtension = "m3u8"
             switch self {
             case .list:
                 return ".\(fileExtension)"

@@ -1,4 +1,4 @@
-import Sugar
+import UIKit
 
 public protocol ImageStorage {
     func cachedImage(for model: AsyncImageModel, completion: @escaping (UIImage?) -> Void)
